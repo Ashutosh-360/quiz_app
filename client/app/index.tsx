@@ -1,9 +1,9 @@
 import { Text, View } from "react-native";
-import "./global.css";
+import "../global.css";
 export default function Index() {
   return (
-    <View className="flex justify-center items-center">
-      <Text className="w-full text-2xl">Hello world</Text>
+    <View className="text-2xl font-semibold flex justify-center items-center flex-1">
+      <Text className="">Edit </Text>
     </View>
   );
 }
