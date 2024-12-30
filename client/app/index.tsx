@@ -1,10 +1,11 @@
 import { Text, View } from "react-native";
 import "../global.css";
+import { Link } from "expo-router";
 export default function Index() {
-  console.log("");
   return (
     <View className="text-2xl font-semibold flex justify-center items-center flex-1">
-      <Text className="">Edit </Text>
+      <Text className="font-semibold">Edit </Text>
+      <Link href="/leaderboard">Go</Link>
     </View>
   );
 }
