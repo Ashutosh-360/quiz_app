@@ -1,11 +1,30 @@
-import { Text, View } from "react-native";
-import "../global.css";
-import { Link } from "expo-router";
-export default function Index() {
+import React, { useContext } from "react";
+import { NavigationProvider, useNavigation } from "../Utilities/Context/NavigationContext.js";
+import Login from "../app/loginPage";
+import SignUp from "../app/signupPage";
+import "../global.css"
+
+
+const MainApp = () => {
+  const { currentScreen } = useNavigation();
+  console.log("jey",currentScreen)
+  switch (currentScreen) {
+   
+    case "Login":
+      return <Login />;
+    case "SignUp":
+      return <SignUp />;
+    default:
+      return <Login />;
+  }
+};
+
+const App = () => {
   return (
-    <View className="text-2xl font-semibold flex justify-center items-center flex-1">
-      <Text className="font-semibold">Edit </Text>
-      <Link href="/leaderboard">Go</Link>
-    </View>
+    <NavigationProvider>
+      <MainApp />
+    </NavigationProvider>
   );
-}
+};
+
+export default App;
