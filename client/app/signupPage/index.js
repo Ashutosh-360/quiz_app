@@ -1,36 +1,46 @@
-import React from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "../../Utilities/Context/NavigationContext";
+import axios from "axios";
 
 const SignUp = () => {
   const { navigate } = useNavigation();
 
+  // Form state
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  // Handle input change
+  const handleInputChange = (key, value) => {
+    setFormData({ ...formData, [key]: value });
+  };
+
+  // Submit the form
+  const handleSignUp = async () => {
+    try {
+      const response = await axios.post("http://localhost:5000/signup", formData);
+      Alert.alert("Success", response.data.message);
+      navigate("Login");
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || "Something went wrong!";
+      Alert.alert("Error", errorMessage);
+    }
+  };
+
   // JSON Configuration for the fields
   const formFields = [
-    {
-      key: "name",
-      placeholder: "Full Name",
-      type: "default", // Keyboard type
-    },
-    {
-      key: "email",
-      placeholder: "Email",
-      type: "email-address",
-    },
-    {
-      key: "password",
-      placeholder: "Password",
-      type: "default",
-      secureTextEntry: true, // To hide password input
-    },
+    { key: "name", placeholder: "Full Name", type: "default" },
+    { key: "email", placeholder: "Email", type: "email-address" },
+    { key: "password", placeholder: "Password", type: "default", secureTextEntry: true },
   ];
 
   return (
     <View className="flex-1 bg-purple-700 justify-center px-6">
-      {/* Title */}
       <Text className="text-white text-4xl font-bold text-center mb-8">Sign Up</Text>
 
-      {/* Map through JSON fields */}
       {formFields.map((field) => (
         <TextInput
           key={field.key}
@@ -39,15 +49,15 @@ const SignUp = () => {
           className="bg-white py-3 px-4 rounded-lg mb-4 text-gray-800"
           keyboardType={field.type}
           secureTextEntry={field.secureTextEntry || false}
+          onChangeText={(value) => handleInputChange(field.key, value)}
+          value={formData[field.key]}
         />
       ))}
 
-      {/* Sign Up Button */}
-      <TouchableOpacity className="bg-purple-500 py-4 rounded-lg">
+      <TouchableOpacity onPress={handleSignUp} className="bg-purple-500 py-4 rounded-lg">
         <Text className="text-center text-white text-lg font-semibold">Sign Up</Text>
       </TouchableOpacity>
 
-      {/* Login Link */}
       <TouchableOpacity onPress={() => navigate("Login")} className="mt-4">
         <Text className="text-center text-white text-sm">
           Already have an account?{" "}
