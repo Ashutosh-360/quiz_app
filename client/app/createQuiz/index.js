@@ -192,6 +192,7 @@ const CreateQuiz = () => {
           onPress={addQuestion}
           className="mt-4 p-4 bg-purple-500 rounded-full"
         >
+          
           <Text className="text-white text-center font-bold text-lg">
             Add Question
           </Text>

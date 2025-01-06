@@ -7,6 +7,7 @@ const { deleteQuiz } = require('../controllers/Quiz/deleteQuiz');
 
 const router = express.Router();
 
+
 router.post('/create_quiz', createQuiz);
 router.get('/quizzes', getAllQuizzes);
 router.get('/quizzes/:id', getQuizById);

@@ -6,6 +6,7 @@ const quizRoutes = require('./routes/quiz');
 const userRoutes = require('./routes/user');
 //const errorHandler = require('./middlewares/errorHandler');
 
+
 const app = express();
 
 // Connect to the database

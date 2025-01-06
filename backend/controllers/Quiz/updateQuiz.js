@@ -3,6 +3,7 @@ const updateQuiz = async (req, res) => {
       const { id } = req.params;
       const { title, questions } = req.body;
   
+      
       const updatedQuiz = await Quiz.findByIdAndUpdate(
         id,
         { title, questions },

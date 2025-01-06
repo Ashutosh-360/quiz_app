@@ -8,4 +8,5 @@ const getAllQuizzes = async (req, res) => {
   }
 };
 
+
 module.exports = { getAllQuizzes };
