@@ -2,6 +2,7 @@ const deleteQuiz = async (req, res) => {
     try {
       const { id } = req.params;
   
+      
       const deletedQuiz = await Quiz.findByIdAndDelete(id);
   
       if (!deletedQuiz) {
