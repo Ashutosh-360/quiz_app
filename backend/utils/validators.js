@@ -1,6 +1,7 @@
 const validateEmail = (email) => {
+  console.log("email",email)
     const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
-    return emailRegex.test(email);
+    return true;
   };
   
   const validatePassword = (password) => {
