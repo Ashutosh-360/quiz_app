@@ -8,7 +8,7 @@ module.exports = {
       backgroundColor: (theme) => ({
       ...theme("colors"),
       primary: "bg-purple-700",
-      secondary: "var(--faint_blue)",
+      secondary: "bg-purple-400",
     }),
     textColor: (theme) => ({
       ...theme("colors"),
