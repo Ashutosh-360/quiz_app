@@ -9,6 +9,7 @@ const validateEmail = (email) => {
     return password.length >= 8 && /\d/.test(password);
   };
   
+  
   const validateSignUp = (data) => {
     const errors = {};
   
