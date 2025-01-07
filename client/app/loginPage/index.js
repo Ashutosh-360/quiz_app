@@ -46,7 +46,7 @@ const Login = () => {
   ];
 
   return (
-    <View className="flex-1 bg-purple-700 justify-center px-6">
+    <View className="flex-1 bg-purple-400 justify-center px-6">
       <Text className="text-white text-4xl font-bold text-center mb-8">Login</Text>
 
       {formFields.map((field) => (
@@ -64,10 +64,10 @@ const Login = () => {
 
       <TouchableOpacity
         onPress={handleLogin}
-        className={`py-4 rounded-lg ${loading ? "bg-gray-400" : "bg-purple-500"}`}
+        className={`py-4 bg-primary rounded-lg ${loading ? "bg-gray-400" : "bg-purple-500"}`}
         disabled={loading}
       >
-        <Text className="text-center text-white text-lg font-semibold">
+        <Text className="text-center  text-white text-lg font-semibold">
           {loading ? "Logging in..." : "Login"}
         </Text>
       </TouchableOpacity>
