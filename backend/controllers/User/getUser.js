@@ -2,17 +2,11 @@ const bcrypt = require('bcrypt');
 const User = require('../../models/User');
 const { validateSignUp } = require('../../utils/validators');
 
-const signUp = async (req, res) => {
+const getUsers = async (req, res) => {
   const { name, email, password } = req.body;
 
   console.log("user det",name,email,password)
   // Validate input data
-  const errors =[]
-  // validateSignUp({ name, email, password });
-  console.log("error",errors)
-  if (Object.keys(errors).length > 0) {
-    return res.status(400).json({ errors });
-  }
 
   try {
     // Check if the user already exists
