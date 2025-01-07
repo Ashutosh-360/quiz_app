@@ -1,19 +1,14 @@
 const Quiz = require("../../models/Quiz");
+const { successHandler } = require("../../utility/successHandler");
 
 const createQuiz = async (req, res, next) => {
   try {
-    const { title, description, category, difficulty, timeLimit, questions } =
-      req.body;
+    const { title, description, category, difficulty, timeLimit, questions } = req.body;
 
-    if (
-      !title ||
-      !category ||
-      !difficulty ||
-      !timeLimit ||
-      questions?.length <= 0
-    ) {
-      res.status(200).json("quiz");
-      return;
+    if (!title || !category || !difficulty || !timeLimit || questions?.length <= 0) {
+      const error = new Error("Required mandatory parameters");
+      error.statusCode = 500;
+      next(error);
     }
     const quiz = new Quiz({
       title,
@@ -23,10 +18,10 @@ const createQuiz = async (req, res, next) => {
       timeLimit,
       questions,
     });
-    await quiz.save();
-    res.status(200).json(quiz);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create quiz" });
+    const quizData = await quiz.save();
+    successHandler(res, quizData);
+  } catch (err) {
+    next(err);
   }
 };
 

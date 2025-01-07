@@ -21,7 +21,13 @@ app.use("/api", quizRoutes);
 app.use("/api/user", userRoutes);
 
 // Error Handler
-// app.use(errorHandler);
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || 500).json({
+    success: false,
+    info: err.message || "Something went wrong!",
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
