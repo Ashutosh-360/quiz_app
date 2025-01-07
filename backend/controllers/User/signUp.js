@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const User = require('../../models/User');
 const { validateSignUp } = require('../../utils/validators');
 
@@ -24,14 +24,14 @@ const signUp = async (req, res) => {
     console.log("exits",existingUser)
     // Hash the password
 
-   // const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     //console.log(hashedPassword)
 
     // Create new user
     const newUser = new User({
       name,
       email,
-      password: password,
+      password: hashedPassword,
     });
 
     console.log("going to save",newUser)
