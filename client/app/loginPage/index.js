@@ -43,7 +43,6 @@ const Login = () => {
       setLoading(false);
     }
   };
-
   // JSON Configuration for the fields
   const formFields = [
     { key: "email", placeholder: "Email", type: "email-address" },
