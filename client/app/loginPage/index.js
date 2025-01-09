@@ -48,7 +48,6 @@ const Login = () => {
     { key: "email", placeholder: "Email", type: "email-address" },
     { key: "password", placeholder: "Password", type: "default", secureTextEntry: true },
   ];
-
   return (
     <View className="flex-1 bg-secondary justify-center px-6">
       <Text className="text-white text-4xl font-bold text-center mb-8">Login</Text>
