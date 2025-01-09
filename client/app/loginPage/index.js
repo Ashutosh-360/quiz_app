@@ -51,7 +51,6 @@ const Login = () => {
   return (
     <View className="flex-1 bg-secondary justify-center px-6">
       <Text className="text-white text-4xl font-bold text-center mb-8">Login</Text>
-
       {formFields.map((field) => (
         <TextInput
           key={field.key}
