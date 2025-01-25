@@ -121,3 +121,19 @@
     /* background: #555; */
     background: #a3a3a3;
 }
+
+.primart_text{
+ color: #6B21A8;
+}
+
+.secondary_text{
+  color: #C084FC;
+}
+
+.bg-primary{
+background-color: #6B21A8;
+}
+
+.bg-secondary{
+  background-color: #C084FC;
+}

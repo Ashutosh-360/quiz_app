@@ -1,9 +1,9 @@
-require('dotenv').config();
-const express = require('express');
-const connectDB = require('./config/db');
-const quizRoutes = require('./routes/quiz');
+require("dotenv").config();
+const express = require("express");
+const connectDB = require("./config/db");
+const quizRoutes = require("./routes/quiz");
 // const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user');
+const userRoutes = require("./routes/user");
 //const errorHandler = require('./middlewares/errorHandler');
 const cors = require("cors");
 const app = express();
@@ -13,20 +13,20 @@ connectDB();
 
 // Middleware
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 
 // Routes
-app.use('/api/quiz', quizRoutes);
-//app.use('/api/auth', authRoutes);
-app.use('/api/user', userRoutes);
-
-app.get("/",(req,res)=>{
-  res.send("hey");
-
-})
+app.use("/api", quizRoutes);
+// app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 
 // Error Handler
-// app.use(errorHandler);
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || 500).json({
+    success: false,
+    info: err.message || "Something went wrong!",
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

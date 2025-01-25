@@ -3,6 +3,7 @@ import { NavigationProvider, useNavigation } from "../Utilities/Context/Navigati
 import Login from "../app/loginPage";
 import SignUp from "../app/signupPage";
 import "../global.css"
+import QuizList from '../app/quizListing/index.js'
 
 
 const MainApp = () => {
@@ -14,6 +15,8 @@ const MainApp = () => {
       return <Login />;
     case "SignUp":
       return <SignUp />;
+    case "QuizListing":
+      return <QuizList/>;
     default:
       return <Login />;
   }
