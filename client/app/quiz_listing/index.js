@@ -14,9 +14,6 @@ const QuizList = () => {
   }, []);
 
   const updateQuizzesHandler = (response) => {
-    console.log(response);
-    Alert.alert("Validation Error", response.data.success);
-
     setQuizzes([...response?.data?.results]);
   };
 
