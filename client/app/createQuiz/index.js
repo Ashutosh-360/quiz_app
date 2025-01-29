@@ -8,13 +8,13 @@ import {
   Alert,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-
+import { PostData } from "../../Utilities/API";
 const CreateQuiz = () => {
   const [quizDetails, setQuizDetails] = useState({
     title: "",
     description: "",
     category: "",
-    difficulty: "",
+    difficulty: "Easy",
     timeLimit: "",
     questions: [],
   });
@@ -77,7 +77,7 @@ const CreateQuiz = () => {
 
   const handleCorrectAnswerChange = (qIndex, value) => {
     const updatedQuestions = [...questions];
-    updatedQuestions[qIndex].correctAnswer = value;
+    updatedQuestions[qIndex].correctOption = value;
     setQuestions(updatedQuestions);
   };
 
@@ -108,7 +108,7 @@ const CreateQuiz = () => {
       Alert.alert("Error", "Please fill all quiz details.");
       return;
     }
-    if (finalQuiz.questions.some((q) => !q.question || !q.correctAnswer)) {
+    if (finalQuiz.questions.some((q) => !q.question || !q.correctOption)) {
       Alert.alert(
         "Error",
         "Please fill all questions and select correct answers."
@@ -116,20 +116,19 @@ const CreateQuiz = () => {
       return;
     }
 
-    console.log(finalQuiz);
-    return;
+    PostData("api/create_quiz", finalQuiz, afterCreateQuizHandler);
+  };
+  const afterCreateQuizHandler = () => {
     Alert.alert("Success", "Quiz created successfully!");
-    // Reset form after submission
     setQuizDetails({
       title: "",
       description: "",
       category: "",
-      difficulty: "",
+      difficulty: "Easy",
       timeLimit: "",
       questions: [],
     });
     setQuestions([]);
-    addQuestion(); // Add one empty question
   };
 
   return (
@@ -163,7 +162,7 @@ const CreateQuiz = () => {
             setItems={setItems}
             onChangeValue={handleDifficultyChange}
             placeholder="Select Difficulty"
-            className="z-10 elevation-lg p-4"
+            className="elevation-lg p-4"
           />
         </View>
 
@@ -202,8 +201,9 @@ const CreateQuiz = () => {
               Correct Answer:
             </Text>
             <DropDownPicker
+              className="elevation-lg p-4"
               open={question.isDropdownOpen}
-              value={question.correctAnswer}
+              value={question.correctOption}
               items={question.options.map((opt, index) => ({
                 label: opt || `Option ${index + 1}`, // Handle empty options gracefully
                 value: index,
@@ -212,14 +212,14 @@ const CreateQuiz = () => {
               setValue={(callback) => {
                 const value =
                   typeof callback === "function"
-                    ? callback(question.correctAnswer)
+                    ? callback(question.correctOption)
                     : callback;
                 handleCorrectAnswerChange(qIndex, value);
               }}
               placeholder="Select Correct Answer"
               containerStyle={{
                 marginTop: 8,
-                zIndex: 1000 - qIndex, // Ensure dropdowns don't overlap
+                zIndex: 10000 - qIndex, // Ensure dropdowns don't overlap
               }}
               style={{
                 backgroundColor: "#f0f0f0",
@@ -235,7 +235,7 @@ const CreateQuiz = () => {
             {/* Add Option Button */}
             <TouchableOpacity
               onPress={() => addOption(qIndex)}
-              className="mt-4 p-3 bg-purple-500 rounded-full"
+              className="mt-6 p-3 bg-purple-500 rounded-full"
             >
               <Text className="text-white text-center font-bold">
                 Add Option
