@@ -1,102 +1,139 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  Alert,
+} from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import axios from "axios";
-
+import { PostData } from "../../Utilities/API";
 const CreateQuiz = () => {
-  const [title, setTitle] = useState("");
-  const [questions, setQuestions] = useState([
-    { question: "", options: ["", ""], correctAnswer: null, isDropdownOpen: false },
+  const [quizDetails, setQuizDetails] = useState({
+    title: "",
+    description: "",
+    category: "",
+    difficulty: "Easy",
+    timeLimit: "",
+    questions: [],
+  });
+  const [open, setOpen] = useState(false);
+  const [difficulty, setDifficulty] = useState("Easy");
+  const [items, setItems] = useState([
+    { label: "Easy", value: "Easy" },
+    { label: "Intermediate", value: "Intermediate" },
+    { label: "Hard", value: "Hard" },
   ]);
+  const [questions, setQuestions] = useState([]);
 
-  const handleOptionChange = (questionIndex, optionIndex, value) => {
-    const updatedQuestions = questions.map((q, i) => {
-      if (i === questionIndex) {
-        const updatedOptions = [...q.options];
-        updatedOptions[optionIndex] = value;
-        return { ...q, options: updatedOptions };
-      }
-      return q;
-    });
-    setQuestions(updatedQuestions);
+  useEffect(() => {
+    addQuestion();
+  }, []);
+  const fields = [
+    { key: "title", placeholder: "Enter Title", keyboardType: "default" },
+    {
+      key: "description",
+      placeholder: "Enter Description",
+      keyboardType: "default",
+    },
+    { key: "category", placeholder: "Enter Category", keyboardType: "default" },
+    {
+      key: "timeLimit",
+      placeholder: "Enter Time Limit (in minutes)",
+      keyboardType: "numeric",
+    },
+  ];
+
+  const handleInputChange = (key, value) => {
+    setQuizDetails((prevData) => ({
+      ...prevData,
+      [key]: value,
+    }));
+  };
+  const handleDifficultyChange = (value) => {
+    handleInputChange("difficulty", value);
+  };
+  const addQuestion = () => {
+    const newQuestion = {
+      options: ["", ""],
+      correctOption: null,
+      isDropdownOpen: false,
+    };
+    setQuestions([...questions, newQuestion]);
   };
 
   const handleQuestionChange = (index, value) => {
-    const updatedQuestions = questions.map((q, i) =>
-      i === index ? { ...q, question: value } : q
-    );
+    const updatedQuestions = [...questions];
+    updatedQuestions[index].question = value;
     setQuestions(updatedQuestions);
   };
 
-  const handleCorrectAnswerChange = (questionIndex, value) => {
-    const updatedQuestions = questions.map((q, i) =>
-      i === questionIndex ? { ...q, correctAnswer: value } : q
-    );
+  const handleOptionChange = (qIndex, oIndex, value) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[qIndex].options[oIndex] = value;
     setQuestions(updatedQuestions);
   };
 
-  const toggleDropdown = (questionIndex) => {
-    const updatedQuestions = questions.map((q, i) => ({
-      ...q,
-      isDropdownOpen: i === questionIndex ? !q.isDropdownOpen : false,
+  const handleCorrectAnswerChange = (qIndex, value) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[qIndex].correctOption = value;
+    setQuestions(updatedQuestions);
+  };
+
+  const addOption = (qIndex) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[qIndex].options.push(""); // Add a new empty option
+    setQuestions(updatedQuestions);
+  };
+
+  const removeOption = (qIndex, oIndex) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[qIndex].options.splice(oIndex, 1); // Remove the option
+    setQuestions(updatedQuestions);
+  };
+
+  const toggleDropdown = (qIndex, isOpen) => {
+    const updatedQuestions = questions.map((question, index) => ({
+      ...question,
+      isDropdownOpen: index === qIndex ? isOpen : false,
     }));
     setQuestions(updatedQuestions);
   };
 
-  const addOption = (questionIndex) => {
-    const updatedQuestions = questions.map((q, i) => {
-      if (i === questionIndex) {
-        return { ...q, options: [...q.options, ""] };
-      }
-      return q;
-    });
-    setQuestions(updatedQuestions);
-  };
-
-  const addQuestion = () => {
-    const newQuestion = { question: "", options: ["", ""], correctAnswer: null, isDropdownOpen: false };
-    setQuestions([...questions, newQuestion]);
-  };
-
   const submitQuiz = async () => {
-    if (!title.trim()) {
-      return Alert.alert("Error", "Quiz title cannot be empty.");
+    const finalQuiz = { ...quizDetails, questions };
+    // Basic validation
+    if (!finalQuiz.title || !finalQuiz.description || !finalQuiz.category) {
+      Alert.alert("Error", "Please fill all quiz details.");
+      return;
     }
-
-    if (
-      questions.some(
-        (q) =>
-          !q.question.trim() ||
-          q.options.length < 2 ||
-          q.options.some((opt) => !opt.trim()) ||
-          q.correctAnswer === null
-      )
-    ) {
-      return Alert.alert(
+    if (finalQuiz.questions.some((q) => !q.question || !q.correctOption)) {
+      Alert.alert(
         "Error",
-        "Each question must have valid text, at least two options, and a selected correct answer."
+        "Please fill all questions and select correct answers."
       );
+      return;
     }
 
-    try {
-      // Replace with your backend API endpoint
-      const response = await axios.post("http://your-api-url.com/api/quizzes", {
-        title,
-        questions,
-      });
-      Alert.alert("Success", "Quiz created successfully!");
-      setTitle("");
-      setQuestions([{ question: "", options: ["", ""], correctAnswer: null, isDropdownOpen: false }]);
-    } catch (error) {
-      console.error("Error creating quiz:", error);
-      Alert.alert("Error", "Failed to create quiz. Please try again.");
-    }
+    PostData("api/create_quiz", finalQuiz, afterCreateQuizHandler);
+  };
+  const afterCreateQuizHandler = () => {
+    Alert.alert("Success", "Quiz created successfully!");
+    setQuizDetails({
+      title: "",
+      description: "",
+      category: "",
+      difficulty: "Easy",
+      timeLimit: "",
+      questions: [],
+    });
+    setQuestions([]);
   };
 
   return (
     <ScrollView className="flex-1 bg-purple-600 pt-12">
       <View className="px-4">
-        {/* Header */}
         <View className="flex-row justify-between items-center">
           <TouchableOpacity>
             <Text className="text-white text-xl">{"<"}</Text>
@@ -105,19 +142,32 @@ const CreateQuiz = () => {
           <View />
         </View>
 
-        {/* Quiz Title */}
-        <TextInput
-          value={title}
-          onChangeText={setTitle}
-          placeholder="Quiz Title"
-          placeholderTextColor="#B0BEC5"
-          className="bg-white mt-4 p-4 rounded-lg text-gray-800 text-lg"
-        />
+        {fields.map((field) => (
+          <TextInput
+            key={field.key}
+            className="bg-white mt-4 p-4 rounded-lg text-gray-800 text-lg"
+            placeholder={field.placeholder}
+            value={quizDetails[field.key]}
+            keyboardType={field.keyboardType}
+            onChangeText={(value) => handleInputChange(field.key, value)}
+          />
+        ))}
+        <View className="z-10 mt-4">
+          <DropDownPicker
+            open={open}
+            value={difficulty}
+            items={items}
+            setOpen={setOpen}
+            setValue={setDifficulty}
+            setItems={setItems}
+            onChangeValue={handleDifficultyChange}
+            placeholder="Select Difficulty"
+            className="elevation-lg p-4"
+          />
+        </View>
 
-        {/* Questions */}
         {questions.map((question, qIndex) => (
           <View key={qIndex} className="mt-6 bg-white p-4 rounded-lg">
-            {/* Question Text */}
             <TextInput
               value={question.question}
               onChangeText={(value) => handleQuestionChange(qIndex, value)}
@@ -126,7 +176,6 @@ const CreateQuiz = () => {
               className="bg-gray-100 p-3 rounded-lg text-gray-800 mb-4"
             />
 
-            {/* Options */}
             {question.options.map((option, oIndex) => (
               <View key={oIndex} className="flex-row items-center mb-2">
                 <TextInput
@@ -148,21 +197,29 @@ const CreateQuiz = () => {
               </View>
             ))}
 
-            {/* Correct Answer Dropdown */}
-            <Text className="text-gray-800 font-bold mt-4">Correct Answer:</Text>
+            <Text className="text-gray-800 font-bold mt-4">
+              Correct Answer:
+            </Text>
             <DropDownPicker
+              className="elevation-lg p-4"
               open={question.isDropdownOpen}
-              value={question.correctAnswer} // Ensure this is the selected value
+              value={question.correctOption}
               items={question.options.map((opt, index) => ({
-                label: opt,
-                value: index, // Use the option's index as the value
+                label: opt || `Option ${index + 1}`, // Handle empty options gracefully
+                value: index,
               }))}
-              setOpen={() => toggleDropdown(qIndex)} // Toggle dropdown visibility
-              setValue={(value) => handleCorrectAnswerChange(qIndex, value)} // Set the correct answer from dropdown
+              setOpen={(isOpen) => toggleDropdown(qIndex, isOpen)} // Pass the index and the new state
+              setValue={(callback) => {
+                const value =
+                  typeof callback === "function"
+                    ? callback(question.correctOption)
+                    : callback;
+                handleCorrectAnswerChange(qIndex, value);
+              }}
               placeholder="Select Correct Answer"
               containerStyle={{
                 marginTop: 8,
-                zIndex: 1000 - qIndex, // Adjust zIndex for dropdown stacking
+                zIndex: 10000 - qIndex, // Ensure dropdowns don't overlap
               }}
               style={{
                 backgroundColor: "#f0f0f0",
@@ -178,7 +235,7 @@ const CreateQuiz = () => {
             {/* Add Option Button */}
             <TouchableOpacity
               onPress={() => addOption(qIndex)}
-              className="mt-4 p-3 bg-purple-500 rounded-full"
+              className="mt-6 p-3 bg-purple-500 rounded-full"
             >
               <Text className="text-white text-center font-bold">
                 Add Option
@@ -192,7 +249,6 @@ const CreateQuiz = () => {
           onPress={addQuestion}
           className="mt-4 p-4 bg-purple-500 rounded-full"
         >
-          
           <Text className="text-white text-center font-bold text-lg">
             Add Question
           </Text>
