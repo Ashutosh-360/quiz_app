@@ -1,11 +1,14 @@
 import axios from "axios";
 // import { store } from "../Store/store";
+import {store} from '../redux/store'
 let baseUrl = "http://localhost:8000/";
 // let baseUrl = "https://shopping-website-12o1.onrender.com/";
 
+
 export function GetData(apiRoute, payload, callback) {
   //   const auth = store.getState()?.auth?.authToken;
-  const auth = "";
+  const auth = store.getState()?.user?.authentication_token;
+  console.log(auth,"auth")
   axios
     .get(baseUrl + apiRoute, {
       params: payload,
@@ -23,7 +26,8 @@ export function GetData(apiRoute, payload, callback) {
 }
 export function PostData(apiRoute, payload, callback) {
   //   const auth = store?.getState()?.auth.authToken;
-  const auth = "";
+  const auth = store.getState()?.user?.authentication_token;
+  console.log(auth,"auth")
 
   try {
     axios

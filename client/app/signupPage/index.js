@@ -5,6 +5,7 @@ import axios from "axios";
 
 const SignUp = () => {
   const { navigate } = useNavigation();
+  console.log(navigate,"navß")
 
   // Form state
   const [formData, setFormData] = useState({

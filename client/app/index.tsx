@@ -1,15 +1,20 @@
-import React, { useContext } from "react";
+import React from "react";
+import { Provider, useDispatch } from "react-redux";
+import { store } from "../redux/store.js";
 import {
   NavigationProvider,
   useNavigation,
 } from "../Utilities/Context/NavigationContext.js";
 import Login from "../app/loginPage";
 import SignUp from "../app/signupPage";
-import "../global.css";
 import QuizList from "../app/quiz_listing/index.js";
-
+import '../global.css'
+import MyProfile from './myProfile/index.js'
 const MainApp = () => {
   const { currentScreen } = useNavigation();
+  const dispatch=useDispatch()
+  console.log("dipatch",dispatch)
+
   switch (currentScreen) {
     case "Login":
       return <Login />;
@@ -17,6 +22,8 @@ const MainApp = () => {
       return <SignUp />;
     case "quiz_listing":
       return <QuizList />;
+    case "my_profile":
+      return <MyProfile/>;
     default:
       return <Login />;
   }
@@ -24,9 +31,12 @@ const MainApp = () => {
 
 const App = () => {
   return (
-    <NavigationProvider>
-      <MainApp />
-    </NavigationProvider>
+    <Provider store={store}>
+      <NavigationProvider>
+        <MainApp />
+      </NavigationProvider>
+    </Provider>
+
   );
 };
 

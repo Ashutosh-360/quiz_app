@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState } from "react";
 const NavigationContext = createContext();
 
 export const NavigationProvider = ({ children }) => {
-  const [currentScreen, setCurrentScreen] = useState("quiz_listing");
+  const [currentScreen, setCurrentScreen] = useState("Login");
 
   const navigate = (screen) => {
     //returned from Main APP
@@ -17,4 +17,10 @@ export const NavigationProvider = ({ children }) => {
   );
 };
 
-export const useNavigation = () => useContext(NavigationContext);
+export const useNavigation = () => {
+  const context = useContext(NavigationContext);
+  if (!context) {
+    throw new Error('useNavigation must be used within a NavigationProvider');
+  }
+  return context;
+};

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
 import QuizDetails from "./quizDetails";
 import { GetData } from "../../Utilities/API";
+import Sidebar from '../../components/sidebar'
 
 const QuizList = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -40,6 +41,7 @@ const QuizList = () => {
   const loadMoreQuizzes = () => {};
   return (
     <View className="flex-1 bg-purple-700 px-4">
+      <Sidebar/>
       <Text className="text-white text-3xl font-bold text-center my-6">
         Quiz List
       </Text>

@@ -2,9 +2,15 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "../../Utilities/Context/NavigationContext";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { authenticationTokenHandler, userDetailsHandler } from "@/redux/Reducers/userSlice";
+import Sidebar from "@/components/sidebar";
 
 const Login = () => {
-  const { navigate } = useNavigation();
+  const { navigate} = useNavigation();
+  console.log(navigate,"nav",useNavigation)
+   const dispatch=useDispatch()
+   console.log(dispatch,"dis")
 
   // Form state
   const [formData, setFormData] = useState({
@@ -24,7 +30,6 @@ const Login = () => {
       Alert.alert("Validation Error", "Both fields are required.");
       return;
     }
-
     setLoading(true);
 
     try {
@@ -36,7 +41,8 @@ const Login = () => {
       }
       Alert.alert("Success", "Login successful!");
       setLoading(false);
-      navigate("QuizListing"); 
+      dispatch(authenticationTokenHandler(response?.data?.token))
+      navigate("quiz_listing"); 
     } catch (error) {
       const errorMessage = error.response?.data?.error || "Invalid email or password!";
       Alert.alert("Error", errorMessage);

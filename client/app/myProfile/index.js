@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { PieChart } from 'react-native-chart-kit'; // Beautiful pie chart
 import CountryFlag from 'react-native-country-flag'; // For country flags
+import {PostData} from '../../Utilities/API'
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState('stats');
+
+    useEffect(()=>{
+        PostData('api/user/profiles',{},(res)=>{
+            console.log(res)
+        })
+    },[])
 
     const renderContent = () => {
         let badges = [{ img: "🎯", text: "Star Badge" },{ img: "🎯", text: "Star Badge" },{ img: "🎯", text: "Star Badge" },{ img: "🎯", text: "Star Badge" },{ img: "🎯", text: "Star Badge" }, { img: "🏆", text: "Target Badge" }, { img: "⭐", text: "Trophy Badge" }];
