@@ -3,13 +3,19 @@ import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { PieChart } from 'react-native-chart-kit'; // Beautiful pie chart
 import CountryFlag from 'react-native-country-flag'; // For country flags
 import {PostData} from '../../Utilities/API'
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { userDetailsHandler } from '@/redux/Reducers/userSlice';
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState('stats');
-
+    const [userDetails,setUserDetails]=useState()
+    const dispatch=useDispatch()
     useEffect(()=>{
         PostData('api/user/profiles',{},(res)=>{
             console.log(res)
+            setUserDetails(res?.data?.profile)
+            dispatch(userDetailsHandler(res?.data?.profile))
         })
     },[])
 
@@ -85,8 +91,8 @@ const Profile = () => {
                         className="w-28 h-28 rounded-full border-4 border-white shadow-md"
                     />
                     <View className="ml-6 flex-1">
-                        <Text className="text-white text-2xl font-bold">Madelyn Dias</Text>
-                        <Text className="text-white text-sm mt-1">Local Rank: #1,438</Text>
+                        <Text className="text-white text-2xl text-center font-bold">{userDetails?.username}</Text>
+                        <Text className="text-white text-sm mt-1">{userDetails?.email}</Text>
                     </View>
                     <CountryFlag isoCode="US" size={40} /> {/* Country Flag */}
                 </View>
