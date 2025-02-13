@@ -1,6 +1,7 @@
 import React from "react";
 import { Provider, useDispatch } from "react-redux";
-import { store } from "../redux/store.js";
+import { store,persistor } from "../redux/store.js";
+import { PersistGate } from 'redux-persist/integration/react';
 import {
   NavigationProvider,
   useNavigation,
@@ -32,9 +33,12 @@ const MainApp = () => {
 const App = () => {
   return (
     <Provider store={store}>
-      <NavigationProvider>
+       <PersistGate loading={null} persistor={persistor}>
+       <NavigationProvider>
         <MainApp />
       </NavigationProvider>
+       </PersistGate>
+     
     </Provider>
 
   );

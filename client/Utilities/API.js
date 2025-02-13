@@ -7,7 +7,7 @@ let baseUrl = "http://localhost:8000/";
 
 export function GetData(apiRoute, payload, callback) {
   //   const auth = store.getState()?.auth?.authToken;
-  const auth = store.getState()?.user?.authentication_token;
+  const auth = store.getState()?.user?.authenticationToken;
   console.log(auth,"auth")
   axios
     .get(baseUrl + apiRoute, {
@@ -26,7 +26,7 @@ export function GetData(apiRoute, payload, callback) {
 }
 export function PostData(apiRoute, payload, callback) {
   //   const auth = store?.getState()?.auth.authToken;
-  const auth = store.getState()?.user?.authentication_token;
+  const auth = store.getState()?.user?.authenticationToken;
   console.log(auth,"auth")
 
   try {
