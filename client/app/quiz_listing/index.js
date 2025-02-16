@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
 import QuizDetails from "./quizDetails";
-import { GetData } from "../../Utilities/API";
+import { GetData, PostData } from "../../Utilities/API";
 import Sidebar from '../../components/sidebar'
 
 const QuizList = () => {
@@ -21,6 +21,15 @@ const QuizList = () => {
   const handleQuizSelect = (quiz) => setSelectedQuiz(quiz);
 
   const handleQuizSubmit = (answers) => {
+    console.log("answers submit",answers,selectedQuiz)
+    let payload={
+      responses:answers,
+      quizId:selectedQuiz?._id
+    }
+    console.log(payload,"payload")
+    PostData('api/submit_quiz',payload,(res)=>{
+      console.log("submit response",res)
+    })
     setSelectedQuiz(null); // Return to quiz list
   };
 
