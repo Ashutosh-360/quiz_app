@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, FlatList, Alert } from "react-native";
 
 const QuizDetails = ({ quiz, onSubmit }) => {
@@ -7,9 +7,13 @@ const QuizDetails = ({ quiz, onSubmit }) => {
   const handleAnswerSelect = (questionIndex, optionIndex) => {
     setAnswers((prev) => ({ ...prev, [questionIndex]: optionIndex }));
   };
+  useEffect(()=>{
+    console.log(answers,"anser")
+  },[answers])
 
   const handleQuizSubmit = () => {
-    if (Object.keys(answers).length !== quiz.questions.length) {
+    console.log(answers,quiz,Object.keys(answers).length != quiz.questions.length)
+    if (Object.keys(answers).length != quiz.questions.length) {
       Alert.alert("Incomplete", "Please answer all the questions.");
       return;
     }
