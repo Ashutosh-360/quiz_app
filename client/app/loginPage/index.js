@@ -3,14 +3,16 @@ import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "../../Utilities/Context/NavigationContext";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { authenticationTokenHandler, userDetailsHandler } from "@/redux/Reducers/userSlice";
+import {
+  authenticationTokenHandler,
+  userDetailsHandler,
+} from "@/redux/Reducers/userSlice";
 import Sidebar from "@/components/sidebar";
+import { PostData } from "@/Utilities/API";
 
 const Login = () => {
-  const { navigate} = useNavigation();
-  console.log(navigate,"nav",useNavigation)
-   const dispatch=useDispatch()
-   console.log(dispatch,"dis")
+  const { navigate } = useNavigation();
+  const dispatch = useDispatch();
 
   // Form state
   const [formData, setFormData] = useState({
@@ -33,30 +35,39 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:8000/api/user/login", formData);
-      console.log(response)
-      if(!response?.data?.token){
-        Alert.alert("Error", "Login fail!");
-        return
-      }
-      Alert.alert("Success", "Login successful!");
-      setLoading(false);
-      dispatch(authenticationTokenHandler(response?.data?.token))
-      navigate("quiz_listing"); 
+      PostData("api/user/login", formData, (response) => {
+        if (!response?.data?.token) {
+          Alert.alert("Error", "Login fail!");
+          return;
+        }
+        Alert.alert("Success", "Login successful!");
+        setLoading(false);
+        dispatch(authenticationTokenHandler(response?.data?.token));
+        navigate("quiz_listing");
+      });
     } catch (error) {
-      const errorMessage = error.response?.data?.error || "Invalid email or password!";
+      const errorMessage =
+        error.response?.data?.error || "Invalid email or password!";
       Alert.alert("Error", errorMessage);
       setLoading(false);
     }
   };
+
   // JSON Configuration for the fields
   const formFields = [
     { key: "email", placeholder: "Email", type: "email-address" },
-    { key: "password", placeholder: "Password", type: "default", secureTextEntry: true },
+    {
+      key: "password",
+      placeholder: "Password",
+      type: "default",
+      secureTextEntry: true,
+    },
   ];
   return (
     <View className="flex-1 bg-secondary justify-center px-6">
-      <Text className="text-white text-4xl font-bold text-center mb-8">Login</Text>
+      <Text className="text-white text-4xl font-bold text-center mb-8">
+        Login
+      </Text>
       {formFields.map((field) => (
         <TextInput
           key={field.key}
@@ -72,7 +83,9 @@ const Login = () => {
 
       <TouchableOpacity
         onPress={handleLogin}
-        className={`py-4 bg-primary rounded-lg ${loading ? "bg-secondary" : "bg-primary"}`}
+        className={`py-4 bg-primary rounded-lg ${
+          loading ? "bg-secondary" : "bg-primary"
+        }`}
         disabled={loading}
       >
         <Text className="text-center  text-white text-lg font-semibold">
