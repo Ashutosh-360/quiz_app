@@ -25,14 +25,7 @@ const QuizList = () => {
   const handleQuizSubmit = (answers) => {
 
     console.log("answers submit",answers,selectedQuiz)
-    let payload={
-      responses:answers,
-      quizId:selectedQuiz?._id
-    }
-    console.log(payload,"payload")
-    PostData('api/submit_quiz',payload,(res)=>{
-      console.log("submit response",res)
-    })
+    
 
     let payload = {
       responses: answers,
