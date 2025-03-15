@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { PieChart } from 'react-native-chart-kit'; // Beautiful pie chart
+// import { PieChart } from 'react-native-chart-kit'; // Beautiful pie chart
 import CountryFlag from 'react-native-country-flag'; // For country flags
 import {PostData} from '../../Utilities/API'
 import { useSelector } from 'react-redux';
@@ -41,29 +41,30 @@ const Profile = () => {
 
         if (activeTab === 'stats') {
             return (
-                <View className="mt-8 w-[80%] justify-center m-auto items-center">
-                    <PieChart
-                        data={[
-                            { name: 'Completed', population: 75, color: '#6C63FF', legendFontColor: '#7F7F7F', legendFontSize: 15 },
-                            { name: 'Remaining', population: 25, color: '#E4E4E7', legendFontColor: '#7F7F7F', legendFontSize: 15 },
-                        ]}
-                        width={380}
-                        height={280}
-                        chartConfig={{
-                            backgroundColor: '#ffffff',
-                            backgroundGradientFrom: '#ffffff',
-                            backgroundGradientTo: '#ffffff',
-                            decimalPlaces: 0,
-                            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                        }}
-                        accessor="population"
-                        backgroundColor="transparent"
-                        paddingLeft="15"
-                    />
-                    <Text className="text-primary-500 text-3xl font-semibold mt-6">37/50</Text>
-                    <Text className="text-gray-600 mt-2">Quizzes Completed This Month</Text>
-                </View>
+                <></>
+                // <View className="mt-8 w-[80%] justify-center m-auto items-center">
+                //     <PieChart
+                //         data={[
+                //             { name: 'Completed', population: 75, color: '#6C63FF', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+                //             { name: 'Remaining', population: 25, color: '#E4E4E7', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+                //         ]}
+                //         width={380}
+                //         height={280}
+                //         chartConfig={{
+                //             backgroundColor: '#ffffff',
+                //             backgroundGradientFrom: '#ffffff',
+                //             backgroundGradientTo: '#ffffff',
+                //             decimalPlaces: 0,
+                //             color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                //             labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                //         }}
+                //         accessor="population"
+                //         backgroundColor="transparent"
+                //         paddingLeft="15"
+                //     />
+                //     <Text className="text-primary-500 text-3xl font-semibold mt-6">37/50</Text>
+                //     <Text className="text-gray-600 mt-2">Quizzes Completed This Month</Text>
+                // </View>
             );
         }
 
